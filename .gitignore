@@ -1,0 +1,8 @@
+.session.config.yaml
+.pytest_cache/
+
+Pipfile
+
+dist/
+
+aspis.egg-info/

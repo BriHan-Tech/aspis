@@ -1,0 +1,6 @@
+[flake8]
+max-line-length = 120
+import-order-style = google
+application-import-names = aspis
+exclude = .git, __pycache__
+plugins = flake8-import-order
