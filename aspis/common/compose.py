@@ -1,7 +1,7 @@
 from functools import reduce
 from typing import Any, Callable
 
-from aspis.internal import num_params
+from aspis.internal import get_arity
 
 
 def compose(*funcs: Callable[..., Any]) -> Callable[..., Any]:
@@ -31,7 +31,7 @@ def compose(*funcs: Callable[..., Any]) -> Callable[..., Any]:
 
     *rest_funcs, last_func = funcs
 
-    if any(map(lambda f: num_params(f) != 1, rest_funcs)):
+    if any(map(lambda f: get_arity(f) != 1, rest_funcs)):
         raise ValueError("every function except for the last one should be unary")
 
     return lambda *args: reduce(lambda acc, func: func(acc), reversed(rest_funcs), last_func(*args))

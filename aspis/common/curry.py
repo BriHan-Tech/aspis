@@ -1,7 +1,7 @@
 from functools import wraps
 from typing import Callable
 
-from aspis.internal import num_params
+from aspis.internal import get_arity
 
 
 def curry(fn: Callable) -> Callable:
@@ -36,7 +36,7 @@ def curry(fn: Callable) -> Callable:
 
     @wraps(fn)
     def curried(*args):
-        if len(args) >= num_params(fn):
+        if len(args) >= get_arity(fn):
             return fn(*args)
         return lambda *more_args: curried(*args, *more_args)
 
