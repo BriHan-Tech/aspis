@@ -1,13 +1,7 @@
-import inspect
-
 from functools import reduce
 from typing import Any, Callable
 
-
-def num_params(fn):
-    signature = inspect.signature(fn)
-    params = signature.parameters
-    return len(params)
+from aspis.internal import num_params
 
 
 def compose(*funcs: Callable[..., Any]) -> Callable[..., Any]:
