@@ -1,6 +1,5 @@
 import pytest
 
-from functools import partial
 from operator import add
 
 from aspis.internal.eager_partial import eager_partial
