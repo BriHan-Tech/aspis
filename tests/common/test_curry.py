@@ -1,5 +1,3 @@
-import pytest
-
 from aspis.common import curry
 
 
