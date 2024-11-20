@@ -31,6 +31,12 @@ def test_with_non_numeric_iterables():
     assert A.all(lambda x: isinstance(x, int), [1, 2, 3])
     assert not A.all(lambda x: isinstance(x, int), [1, "two", 3])
 
+    assert A.all(lambda x: isinstance(x, int), set([1, 2, 3]))
+    assert not A.all(lambda x: isinstance(x, int), set([1, "two", 3]))
+
+    assert A.all(lambda x: isinstance(x, int), (1, 2, 3))
+    assert not A.all(lambda x: isinstance(x, int), (1, "two", 3))
+
 
 def test_edge_cases():
     assert A.all(lambda x: x > 0, [1])
