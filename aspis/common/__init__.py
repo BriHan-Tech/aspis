@@ -4,6 +4,7 @@ from .add_index_right import *
 from .adjust import *
 from .all import all_satisfy as all
 from .all_pass import *
+from .always import *
 from .apply import *
 from .compose import *
 from .curry import *
