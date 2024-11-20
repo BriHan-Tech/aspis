@@ -47,13 +47,3 @@ class ArityError(Exception):
         if self.is_arity_error:
             return f"Expected {self.expected} arguments, got {self.received}"
         return super().__str__()
-
-
-import inspect
-from typing import Any, Callable
-
-
-def get_arity(fn: Callable[..., Any]) -> int:
-    signature = inspect.signature(fn)
-    params = signature.parameters
-    return len(params)

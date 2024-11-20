@@ -1,8 +1,6 @@
 from functools import reduce
 from typing import Any, Callable
 
-from aspis.internal import get_arity
-
 
 def pipe(first_func: Callable[..., Any], *funcs: Callable[[Any], Any]) -> Callable[..., Any]:
     """
@@ -28,8 +26,4 @@ def pipe(first_func: Callable[..., Any], *funcs: Callable[[Any], Any]) -> Callab
         >>> add_then_multiply = pipe(add_two, times_two)
         >>> result = add_then_multiply(3)  # returns 10
     """
-
-    if any(map(lambda f: get_arity(f) != 1, funcs)):
-        raise ValueError("every function except for the last one should be unary")
-
     return lambda *args: reduce(lambda acc, func: func(acc), funcs, first_func(*args))
