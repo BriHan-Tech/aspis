@@ -41,6 +41,9 @@ def eager_partial(fn: Callable[..., T], *bound_args: Any) -> Callable[..., T] | 
         try:
             return fn(*bound_args[:i])
 
+        # Need to use ArityError instead of checking if callable
+        # because we need to test with the largest number of bounded arguments
+        # before decreasing the number of arguments, which will cause error anyway
         except TypeError as e:
             arity_error = ArityError(e)
 
