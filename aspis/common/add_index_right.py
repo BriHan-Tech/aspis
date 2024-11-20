@@ -20,8 +20,9 @@ def add_index_right(func: Callable[[T, int], U], arr: Sequence[T]) -> Sequence[U
         arr : Sequence[T]
             The sequence to be mapped over.
 
-    Returns: Sequence[U]
-        A new sequence with the results of the function applied to each element in reverse.
+    Returns:
+        Sequence[U]
+            A new sequence with the results of the function applied to each element in reverse.
     """
 
     arr_len = len(arr)

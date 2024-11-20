@@ -20,8 +20,9 @@ def add_index(func: Callable[[T, int], U], arr: Sequence[T]) -> Sequence[U]:
         arr : Sequence[T]
             The sequence to be mapped over.
 
-    Returns: Sequence[U]
-        A new sequence with the results of the function applied to each element.
+    Returns:
+        Sequence[U]
+            A new sequence with the results of the function applied to each element.
     """
     result_arr = map(lambda x: func(x[1], x[0]), enumerate(arr))
 

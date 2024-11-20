@@ -7,7 +7,7 @@ def adjust(idx: int, func: Callable[[T], T], seq: Sequence[T]) -> Sequence[T] | 
     """
     Adjusts the element at the specified index in a sequence by applying a function to it.
 
-    Args :
+    Args:
         idx : int
             The index of the element to adjust. This index must be within the range of the sequence.
 
@@ -18,8 +18,9 @@ def adjust(idx: int, func: Callable[[T], T], seq: Sequence[T]) -> Sequence[T] | 
         seq : Sequence[T]
             The sequence (list, tuple, or string) to modify.
 
-    Returns : Sequence[T] | str
-        A new sequence with the element at the specified index modified.
+    Returns:
+        Sequence[T] | str
+            A new sequence with the element at the specified index modified.
     """
 
     if isinstance(seq, str):
