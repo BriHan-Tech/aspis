@@ -12,3 +12,4 @@ from .flip import *
 from .identity import *
 from .multiply import *
 from .pipe import *
+from .prop_eq import *
