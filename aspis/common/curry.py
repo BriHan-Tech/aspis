@@ -1,7 +1,7 @@
 from functools import wraps
 from typing import Callable
 
-from aspis.internal import get_arity
+from aspis.internal import eager_partial
 
 
 def curry(fn: Callable) -> Callable:
@@ -36,8 +36,11 @@ def curry(fn: Callable) -> Callable:
 
     @wraps(fn)
     def curried(*args):
-        if len(args) >= get_arity(fn):
-            return fn(*args)
-        return lambda *more_args: curried(*args, *more_args)
+        res = eager_partial(fn, *args)
+
+        if not callable(res):
+            return res
+
+        return lambda *more_args: eager_partial(res, *more_args)
 
     return curried
