@@ -1,2 +1,2 @@
 from .eager_partial import *
-from .utils import *
+from .arity_error import *

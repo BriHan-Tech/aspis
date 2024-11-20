@@ -1,7 +1,7 @@
 from functools import partial
 from typing import Any, Callable, TypeVar
 
-from aspis.internal.utils import ArityError
+from aspis.internal.arity_error import ArityError
 
 T = TypeVar("T")
 
