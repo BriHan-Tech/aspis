@@ -1,5 +1,6 @@
 from .add import *
 from .add_index import *
+from .add_index_right import *
 from .apply import *
 from .compose import *
 from .curry import *
