@@ -3,6 +3,7 @@ import pytest
 from operator import add
 
 from aspis.internal.eager_partial import eager_partial
+from aspis.internal.errors.arity_error import ArityError
 
 
 def test_eager_partial_no_args():
@@ -11,6 +12,16 @@ def test_eager_partial_no_args():
 
 def test_eager_partial_all_args():
     assert eager_partial(add, 1, 2) == 3
+
+
+def test_eager_partial_all_kwargs():
+    test_add = lambda x, y: x + y
+    assert eager_partial(test_add, x=1, y=2) == 3
+
+
+def test_eager_partial_mix_args_kwargs():
+    test_add = lambda x, y: x + y
+    assert eager_partial(test_add, 1, y=2) == 3
 
 
 def test_eager_partial_insufficient_args():
@@ -24,7 +35,10 @@ def test_eager_partial_insufficient_args():
 
 
 def test_eager_partial_excess_args():
-    assert eager_partial(add, 1, 2, 3) == 3
+    with pytest.raises(ArityError) as exc_info:
+        eager_partial(add, 1, 2, 3)
+
+    assert isinstance(exc_info.value, TypeError)
 
 
 def test_eager_partial_with_varargs():
