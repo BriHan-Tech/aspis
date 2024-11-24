@@ -1,4 +1,3 @@
-from aspis.internal import eager_partial
+from functools import partial
 
-
-apply = eager_partial
+apply = partial
