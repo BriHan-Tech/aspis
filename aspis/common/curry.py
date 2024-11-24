@@ -1,10 +1,13 @@
 from functools import wraps
-from typing import Callable
+from typing import Any, Callable, TypeVar
 
-from aspis.internal import eager_partial
+import aspis.internal as Ai
 
 
-def curry(fn: Callable) -> Callable:
+R = TypeVar("R")
+
+
+def curry(fn: Callable[..., R]) -> Callable:
     """
     Transforms a function into a curried version.
 
@@ -35,12 +38,12 @@ def curry(fn: Callable) -> Callable:
     """
 
     @wraps(fn)
-    def curried(*args):
-        res = eager_partial(fn, *args)
+    def curried(*args: Any, **kwargs: Any) -> Callable | R:
+        res = Ai.eager_partial(fn, *args, **kwargs)
 
         if not callable(res):
             return res
 
-        return lambda *more_args: eager_partial(res, *more_args)
+        return lambda *margs, **mkwargs: Ai.eager_partial(res, *margs, **mkwargs)
 
     return curried

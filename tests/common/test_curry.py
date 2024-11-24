@@ -9,6 +9,9 @@ def test_curry_simple_addition():
     assert curried_add(1, 2)(3) == 6
     assert curried_add(1)(2, 3) == 6
     assert curried_add(1, 2, 3) == 6
+    assert curried_add(1, 2, c=3) == 6
+    assert curried_add(1, 2)(c=3) == 6
+    assert curried_add(c=1)(2)(3) == 6
 
 
 def test_curry_variadic_function():
@@ -20,6 +23,17 @@ def test_curry_variadic_function():
     assert curried_add(1) == 1
     assert curried_add(1, 2) == 3
     assert curried_add(1, 2, 3) == 6
+
+
+def test_curry_variadic_kwarg_function():
+    def add(a, **kwargs):
+        return a + sum(kwargs.values())
+
+    curried_add = curry(add)
+
+    assert curried_add(1) == 1
+    assert curried_add(1, b=2) == 3
+    assert curried_add(1, b=2, c=3) == 6
 
 
 def test_curry_no_arguments():
@@ -43,7 +57,7 @@ def test_curry_with_default_args():
 
 def test_curry_decorator_simple_addition():
     @curry
-    def add(a, b, c):
+    def add(a: str, b, c):
         return a + b + c
 
     assert add(1)(2)(3) == 6
