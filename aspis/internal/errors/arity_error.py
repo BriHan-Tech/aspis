@@ -1,7 +1,7 @@
 import re
 
 
-class ArityError(Exception):
+class ArityError(TypeError):
     def __init__(self, e: Exception):
         super().__init__(str(e))
 
@@ -42,8 +42,3 @@ class ArityError(Exception):
 
     def __bool__(self):
         return self.is_arity_error
-
-    def __str__(self):
-        if self.is_arity_error:
-            return f"Expected {self.expected} arguments, got {self.received}"
-        return super().__str__()
