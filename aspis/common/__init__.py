@@ -6,6 +6,7 @@ from .all import all_satisfy as all
 from .all_pass import *
 from .always import *
 from .any import any_satisfy as any
+from .any_pass import *
 from .apply import *
 from .compose import *
 from .curry import *
