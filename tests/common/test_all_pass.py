@@ -27,6 +27,7 @@ def test_all_pass_with_empty_predicate_list():
 def test_all_pass_with_empty_iterable():
     is_positive = lambda x: x > 0
     assert A.all_pass([is_positive], []) is True
+    assert A.all_pass([A.always(True)])([]) is True
 
 
 def test_all_pass_with_multiple_predicates_and_mixed_data():

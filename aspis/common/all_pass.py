@@ -36,7 +36,7 @@ def all_pass(preds: Sequence[Callable[[T], bool]], var: T | Iterable[T]) -> bool
         >>> all_pass([lambda x: x > 0, lambda x: x < 10], [1, -2, 3])
         False
     """
-    if isinstance(var, Iterable) and not isinstance(var, str):
+    try:
+        return compose(all, map)(lambda pred: pred(var), preds)
+    except Exception:
         return compose(all, map)(lambda pred: all_satisfy(pred, var), preds)
-
-    return compose(all, map)(lambda pred: pred(var), preds)
