@@ -14,4 +14,4 @@ def always(x: Any) -> Callable[[], Any]:
             A function that always returns the value x.
 
     """
-    return lambda: x
+    return lambda *_, **__: x
