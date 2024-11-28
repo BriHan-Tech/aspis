@@ -1,4 +1,5 @@
 import operator
+
 import pytest
 
 import aspis.internal as Ai

@@ -1,7 +1,7 @@
 from typing import Callable, Iterable, TypeVar
 
-from .curry import curry
 from .compose import compose
+from .curry import curry
 
 T = TypeVar("T")
 

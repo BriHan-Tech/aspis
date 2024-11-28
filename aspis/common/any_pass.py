@@ -1,8 +1,8 @@
-from typing import Sequence, TypeVar, Callable, Iterable
+from typing import Callable, Iterable, Sequence, TypeVar
 
 from .any import any_satisfy
-from .curry import curry
 from .compose import compose
+from .curry import curry
 
 T = TypeVar("T")
 

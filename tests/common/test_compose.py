@@ -1,4 +1,4 @@
-from aspis.common import add, compose, divide, multiply, identity
+from aspis.common import add, compose, divide, identity, multiply
 
 
 def test_single_function():
