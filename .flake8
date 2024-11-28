@@ -6,3 +6,6 @@ ignore = E731
 exclude = .git, __pycache__
 include = aspis/*, tests/*
 plugins = flake8-import-order
+per-file-ignores =
+  __init__.py: F403, F401
+  tests/*: E741
