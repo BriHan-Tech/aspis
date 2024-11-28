@@ -1,3 +1,4 @@
+import operator
 import pytest
 
 import aspis.internal as Ai
@@ -59,3 +60,41 @@ def test_arity_error_unrelated_error():
 
     assert not isinstance(exc_info.value, ArityError)
     assert str(exc_info.value) == "Unrelated error"
+
+
+def test_arity_error_capture_error_messages():
+    # map() must have at least 2 arguments
+    with pytest.raises(Ai.ArityError):
+        Ai.error_ctx(map)(lambda x: x)
+
+    # filter() must have at least 2 arguments
+    with pytest.raises(Ai.ArityError):
+        Ai.error_ctx(filter)(lambda x: x > 1)
+
+    # filter expected 2 arguments, got 3
+    with pytest.raises(Ai.ArityError):
+        Ai.error_ctx(filter)(lambda x: x > 1, [], [])
+
+    # missing 1 required positional argument: 'y'
+    testfn = lambda x, y: x + y
+    with pytest.raises(Ai.ArityError):
+        Ai.error_ctx(testfn)(1)
+
+    # missing 16 required positional arguments: 'a', 'b', 'c', ...
+    testfn = lambda a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q: a + b
+    with pytest.raises(Ai.ArityError):
+        Ai.error_ctx(testfn)(1)
+
+    # missing 1 required keyword-only argument: 'y'
+    testfn = lambda x, *, y: x + y
+    with pytest.raises(Ai.ArityError):
+        Ai.error_ctx(testfn)(1)
+
+    # missing 1 required keyword-only argument: 'y'
+    testfn = lambda a, *, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q: a + b
+    with pytest.raises(Ai.ArityError):
+        Ai.error_ctx(testfn)(1)
+
+    # add expected 2 arguments, got 0
+    with pytest.raises(Ai.ArityError):
+        Ai.error_ctx(operator.add)()
