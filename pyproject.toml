@@ -28,3 +28,9 @@ homepage = "https://github.com/brihan/aspis"
 
 [tool.black]
 line-length = 120
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "tests.py", "test.py"]
+python_functions = ["test_*"]
+pythonpath = ["."]
