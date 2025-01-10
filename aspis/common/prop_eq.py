@@ -1,24 +1,26 @@
-from typing import Dict, TypeVar
+from typing import Mapping, TypeVar
 
+from .prop import prop
 from .curry import curry
 
 T = TypeVar("T")
+R = TypeVar("R")
 
 
 @curry
-def prop_eq(prop: str, value: T, obj: Dict[str, T]) -> bool:
+def prop_eq(p: T, value: R, obj: Mapping[T, R] | object) -> bool:
     """
-    Returns a check if the specified property of a dictionary equals the given value.
+    Returns a check if the specified property of an object equals the given value.
 
     Args:
-        prop : str
-            The key of the property to check in the dictionary.
+        prop : T
+            The key of the property to check in the object
 
-        value : T
-            The value to compare against.
+        value : R
+            The value to compare against
 
-        obj: Dict[str, T]
-            The dictionary to check the property
+        obj: Mapping[T, R] | object
+            The object to check the property
 
     Returns:
         bool
@@ -32,4 +34,4 @@ def prop_eq(prop: str, value: T, obj: Dict[str, T]) -> bool:
         False
     """
 
-    return obj[prop] == value
+    return prop(p, obj) == value
