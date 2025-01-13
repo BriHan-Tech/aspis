@@ -1,5 +1,3 @@
-import pytest
-
 import aspis.common as A
 
 
@@ -68,12 +66,9 @@ def test_curry_decorator_simple_addition():
     assert add(1, 2, 3) == 6
 
 
-def test_curry_should_not_handle_over_application():
+def test_curry_should_handle_over_application():
     def add(a, b):
         return a + b
 
-    with pytest.raises(TypeError):
-        A.curry(add)(1, 2, 3)
-
-    with pytest.raises(TypeError):
-        A.curry(add)(1)(2, 3)
+    assert A.curry(add)(1, 2, 3) == 3
+    assert A.curry(add)(1)(2, 3) == 3

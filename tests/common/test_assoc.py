@@ -65,8 +65,5 @@ def test_assoc_partial_with_kwargs():
 
 
 def test_assoc_over_application():
-    with pytest.raises(TypeError):
-        A.assoc("a", 1, {}, "extra")
-
-    with pytest.raises(TypeError):
-        A.assoc("a")("b")({}, "extra")
+    assert A.assoc("a", 1, {}, "extra") == {"a": 1}
+    assert A.assoc("a")("b", {}, "extra") == {"a": "b"}

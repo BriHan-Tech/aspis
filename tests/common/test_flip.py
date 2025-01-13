@@ -33,8 +33,7 @@ def test_flip_over_application():
     def f(x, y):
         return str(x) + str(y)
 
-    with pytest.raises(TypeError):
-        f(1, 2, 3)
+    assert f(1, 2, 3) == "21"
 
 
 def test_flip_with_keyword_arguments():

@@ -3,7 +3,6 @@ import operator
 import pytest
 
 from aspis.internal.eager_partial import eager_partial
-from aspis.internal.errors.arity_error import ArityError
 
 
 def test_eager_partial_no_args():
@@ -35,10 +34,7 @@ def test_eager_partial_insufficient_args():
 
 
 def test_eager_partial_excess_args():
-    with pytest.raises(ArityError) as exc_info:
-        eager_partial(operator.add, 1, 2, 3)
-
-    assert isinstance(exc_info.value, TypeError)
+    assert eager_partial(operator.add, 1, 2, 3) == 3
 
 
 def test_eager_partial_with_varargs():

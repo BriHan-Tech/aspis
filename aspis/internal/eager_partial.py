@@ -10,8 +10,12 @@ T = TypeVar("T")
 
 def eager_partial(fn: Callable[P, T], *args: Any, **kwargs: Any) -> Callable[..., T] | T:
     """
-    Partially applies arguments to a function and returns the result if all arguments are provided.
-    Keyword Arguments are always applied.
+    Partially applies arguments to a function and returns the result immediately if all arguments are provided.
+    Otherwise, returns a new function awaiting the rest.
+
+    Note:
+    - Over-application is handled by removing arguments from the end
+    - Under-application is handled by returning a new function awaiting
 
     Args:
         fn : Callable[..., T]
@@ -28,11 +32,22 @@ def eager_partial(fn: Callable[P, T], *args: Any, **kwargs: Any) -> Callable[...
             Partially applied function if not all arguments are provided, else the result of the function.
     """
 
-    error_handled_fn = error_ctx(fn)
+    safe_fn = partial(error_ctx(fn), **kwargs)
 
     try:
-        return error_handled_fn(*args, **kwargs)
+        return safe_fn(*args)
     except ArityError as e:
+
+        # Under Application
         if e.received < e.expected:
-            return partial(error_handled_fn, *args, **kwargs)
+            return partial(safe_fn, *args)
+
+        # Over Application
+        else:
+            for i in range(1, len(args) + 1):
+                try:
+                    return safe_fn(*args[:-i])
+                except ArityError:
+                    continue
+
         raise e
