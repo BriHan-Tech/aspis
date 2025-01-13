@@ -14,7 +14,7 @@ def test_arity_error_missing_args():
         Ai.error_ctx(fn)(1)
 
     assert exc_info.value.is_arity_error
-    assert exc_info.value.expected > exc_info.value.received
+    assert exc_info.value.underapplied
 
     # arity error should be a TypeError
     assert isinstance(exc_info.value, TypeError)
@@ -33,7 +33,7 @@ def test_arity_error_extra_args():
         Ai.error_ctx(fn)(1, 2)
 
     assert exc_info.value.is_arity_error
-    assert exc_info.value.expected < exc_info.value.received
+    assert exc_info.value.overapplied
 
     # arity error should be a TypeError
     assert isinstance(exc_info.value, TypeError)

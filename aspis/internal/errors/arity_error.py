@@ -7,9 +7,10 @@ class ArityError(TypeError):
 
         self.is_arity_error = False
 
-        # NOTE: expected and received do not reflect the number of arguments expected and received
-        self.expected = 0
-        self.received = 0
+        self.underapplied = False
+        self.overapplied = False
+        self.kwarg_error = False
+        self.unexpected_kwargs = []
 
         self._parse_error(e)
 
@@ -19,38 +20,53 @@ class ArityError(TypeError):
 
         message = str(e.args[0]).lower()
 
-        patterns = [
+        arg_error_patterns = [
             (r"expected (\d+) arguments?,? got (\d+)", self._match_expected_received),
-            (r"missing (\d+) required positional arguments?: ((?:'[\w_]+'(?:, )?)+)", self._handle_missing_args),
-            (
-                r"missing (\d+) required keyword-only arguments?: ((?:'[\w_]+'(?:, )?)+)",
-                self._handle_missing_args,
-            ),
             (r"takes (\d+) positional arguments? but (\d+) were given", self._match_expected_received),
-            (r"(\w+)\(\) must have at least (\w+) arguments.", self._expected_more_args),
+            (
+                r"missing (\d+) required positional arguments?: ((?:'[\w_]+'(?:, )?)+)",
+                self._handle_underapplication_args,
+            ),
+            (r"must have at least (\w+) arguments.", self._handle_underapplication_args),
+            (r"got multiple values for argument '(.*?)'", self._handle_overapplication_args),
         ]
 
-        for pattern, handler in patterns:
+        kwarg_error_patterns = [
+            (
+                r"missing (\d+) required keyword-only arguments?: ((?:'[\w_]+'(?:, )?)+)",
+                self._handle_underapplication_args,
+            ),
+            (r"got an unexpected keyword argument '(.*?)'", self._handle_overapplication_kwargs),
+        ]
+
+        for pattern, handler in arg_error_patterns + kwarg_error_patterns:
             match = re.search(pattern, message)
 
             if match:
+                self.is_arity_error = True
                 handler(match)
                 break
 
-    def _expected_more_args(self, _):
-        self.is_arity_error = True
-        self.expected = 1
-        self.received = 0
-
     def _match_expected_received(self, match):
-        self.is_arity_error = True
-        self.expected = int(match.group(1))
-        self.received = int(match.group(2))
+        if int(match.group(1)) > int(match.group(2)):
+            self._handle_underapplication_args(match)
+        else:
+            self._handle_overapplication_args(match)
 
-    def _handle_missing_args(self, match):
-        self.is_arity_error = True
-        missing = int(match.group(1))
-        self.expected = self.received + missing
+    def _handle_underapplication_args(self, _):
+        self.underapplied = True
+
+    def _handle_overapplication_args(self, _):
+        self.overapplied = True
+
+    def _handle_underapplication_kwargs(self, _):
+        self.underapplied = True
+        self.kwarg_error = True
+
+    def _handle_overapplication_kwargs(self, match):
+        self.overapplied = True
+        self.kwarg_error = True
+        self.unexpected_kwargs.append(match.group(1))
 
     def __bool__(self):
         return self.is_arity_error

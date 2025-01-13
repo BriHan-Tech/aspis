@@ -7,6 +7,7 @@ from aspis.internal.eager_partial import eager_partial
 
 def test_eager_partial_no_args():
     assert eager_partial(operator.add)(1, 2) == 3
+    assert eager_partial(lambda: 1) == 1
 
 
 def test_eager_partial_all_args():
@@ -33,8 +34,13 @@ def test_eager_partial_insufficient_args():
     assert res(3) == 6
 
 
-def test_eager_partial_excess_args():
+def test_eager_partial_overapplication():
     assert eager_partial(operator.add, 1, 2, 3) == 3
+
+    test_add = lambda x, y: x + y
+    assert eager_partial(test_add, 1, y=2, z=3) == 3
+    assert eager_partial(test_add, 1, y=2, z=3, t=5) == 3
+    assert eager_partial(test_add, 1, 2, 3, 4, 5, y=2, z=3, t=5) == 3
 
 
 def test_eager_partial_with_varargs():

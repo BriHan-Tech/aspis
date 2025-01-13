@@ -8,14 +8,47 @@ P = ParamSpec("P")
 T = TypeVar("T")
 
 
+def handle_arity_error(error: ArityError, safe_fn: partial[T]) -> partial | T:
+    # Under Application
+    if error.underapplied:
+        return safe_fn
+
+    # Over Application with Keyword Arguments
+    elif error.overapplied and error.kwarg_error:
+        del safe_fn.keywords[error.unexpected_kwargs.pop()]
+
+        try:
+            return safe_fn()
+        except ArityError as new_error:
+            if new_error.overapplied:
+                return handle_arity_error(new_error, safe_fn)
+            raise new_error
+
+    # Over Application with Normal Arguments
+    elif error.overapplied and not error.kwarg_error:
+        original_args = safe_fn.args
+
+        for i in range(1, len(original_args) + 1):
+            new_partial = partial(safe_fn.func, *original_args[:-i], **safe_fn.keywords)
+
+            try:
+                return new_partial()
+            except ArityError as new_error:
+                if new_error.overapplied and not new_error.kwarg_error:
+                    continue
+                if new_error.overapplied and new_error.kwarg_error:
+                    return handle_arity_error(new_error, safe_fn)
+                raise new_error
+
+    raise error
+
+
 def eager_partial(fn: Callable[P, T], *args: Any, **kwargs: Any) -> Callable[..., T] | T:
     """
     Partially applies arguments to a function and returns the result immediately if all arguments are provided.
     Otherwise, returns a new function awaiting the rest.
 
-    Note:
-    - Over-application is handled by removing arguments from the end
-    - Under-application is handled by returning a new function awaiting
+    Note: Keyword Arguments are prioritized over positional arguments.
 
     Args:
         fn : Callable[..., T]
@@ -32,22 +65,9 @@ def eager_partial(fn: Callable[P, T], *args: Any, **kwargs: Any) -> Callable[...
             Partially applied function if not all arguments are provided, else the result of the function.
     """
 
-    safe_fn = partial(error_ctx(fn), **kwargs)
+    safe_fn = partial(error_ctx(fn), *args, **kwargs)
 
     try:
-        return safe_fn(*args)
+        return safe_fn()
     except ArityError as e:
-
-        # Under Application
-        if e.received < e.expected:
-            return partial(safe_fn, *args)
-
-        # Over Application
-        else:
-            for i in range(1, len(args) + 1):
-                try:
-                    return safe_fn(*args[:-i])
-                except ArityError:
-                    continue
-
-        raise e
+        return handle_arity_error(e, safe_fn)
