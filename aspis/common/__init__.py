@@ -9,6 +9,7 @@ from .any import any_satisfy as any
 from .any_pass import *
 from .aperture import *
 from .apply import *
+from .apply_spec import *
 from .assoc import *
 from .compose import *
 from .curry import *
