@@ -1,7 +1,7 @@
 from typing import Mapping, TypeVar
 
-from .prop import prop
 from .curry import curry
+from .prop import prop
 
 T = TypeVar("T")
 R = TypeVar("R")

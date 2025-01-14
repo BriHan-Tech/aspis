@@ -2,7 +2,6 @@ from collections.abc import Callable, Mapping
 from typing import Any
 
 import aspis.internal as Ai
-
 from .curry import curry
 
 

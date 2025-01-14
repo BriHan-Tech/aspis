@@ -1,5 +1,6 @@
+from collections.abc import Mapping
 from copy import deepcopy
-from typing import TypeVar, Mapping
+from typing import TypeVar
 
 from .curry import curry
 
