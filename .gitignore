@@ -4,5 +4,6 @@
 Pipfile
 
 dist/
+build/
 
 aspis.egg-info/
