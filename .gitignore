@@ -7,3 +7,5 @@ dist/
 build/
 
 aspis.egg-info/
+
+.DS_Store
