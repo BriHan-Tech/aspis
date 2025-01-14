@@ -7,7 +7,7 @@ name = "aspis"
 version = "0.3.0"
 description = "A functional programming library for Python"
 authors = [
-  {name = "Brian Han", email="brihan.tech@gmail.com"}
+  {name = "BriHan", email="brihan.tech@gmail.com"}
 ]
 license = {text = "MIT"}
 readme = "README.md"
