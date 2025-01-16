@@ -17,6 +17,7 @@ from .curry import *
 from .divide import *
 from .equals import *
 from .flip import *
+from .gt import *
 from .identity import *
 from .multiply import *
 from .pipe import *
